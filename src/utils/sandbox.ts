@@ -209,15 +209,39 @@ export const executeSandboxedCode = (
       if (capturedData.type === 'array' || capturedData.type === 'stack' || capturedData.type === 'queue') {
         const arr = capturedData.data;
         const isStack = capturedData.type === 'stack';
+        const isQueue = capturedData.type === 'queue';
         
-        visualizationState = {
-          nodes: arr.map((value: any, index: number) => ({
-            id: `node-${index}`,
-            value: value,
-            x: isStack ? 300 : 100 + index * 80,
-            y: isStack ? 400 - index * 50 : 200,
-          }))
-        };
+        // Multi-row layout for arrays and queues to prevent overflow
+        const nodeWidth = 70;
+        const nodeHeight = 70;
+        const spacing = 10;
+        const nodesPerRow = 8; // Max nodes per row
+        
+        if (isStack) {
+          // Stack grows vertically (bottom to top)
+          visualizationState = {
+            nodes: arr.map((value: any, index: number) => ({
+              id: `node-${index}`,
+              value: value,
+              x: 150,
+              y: 500 - index * (nodeHeight + spacing),
+            }))
+          };
+        } else {
+          // Array and Queue use multi-row grid layout
+          visualizationState = {
+            nodes: arr.map((value: any, index: number) => {
+              const row = Math.floor(index / nodesPerRow);
+              const col = index % nodesPerRow;
+              return {
+                id: `node-${index}`,
+                value: value,
+                x: 80 + col * (nodeWidth + spacing),
+                y: 80 + row * (nodeHeight + spacing),
+              };
+            })
+          };
+        }
       } else if (capturedData.type === 'map') {
         const map = capturedData.data;
         const entries = Object.entries(map);

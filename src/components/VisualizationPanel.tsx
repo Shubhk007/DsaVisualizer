@@ -39,16 +39,23 @@ const VisualizationPanel: React.FC<VisualizationPanelProps> = ({ dsaType }) => {
     const fontSize = isSpecialType ? 12 : 14;
 
     return (
-      <g key={node.id} className="animate-fadeIn">
-        {/* Node Circle/Rectangle */}
+      <g key={node.id} className="animate-node-enter node-shadow transition-transform duration-200 hover:scale-[1.02]">
+        {/* Node Rectangle */}
+        <defs>
+          <linearGradient id={`grad-${node.id}`} x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent-start)" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="var(--accent-end)" stopOpacity="0.95" />
+          </linearGradient>
+        </defs>
         <rect
           x={node.x - nodeSize / 2}
           y={node.y - nodeSize / 2}
           width={nodeSize}
           height={nodeSize}
-          rx="8"
-          className="fill-primary-500 dark:fill-primary-600 stroke-primary-700 dark:stroke-primary-400"
-          strokeWidth="2"
+          rx="10"
+          fill={`url(#grad-${node.id})`}
+          stroke="var(--accent-stroke)"
+          strokeWidth="1.5"
         />
         
         {/* Node Value */}
@@ -100,7 +107,7 @@ const VisualizationPanel: React.FC<VisualizationPanelProps> = ({ dsaType }) => {
     const endY = toNode.y - (dy / distance) * nodeRadius;
 
     return (
-      <g key={`${edge.from}-${edge.to}`}>
+      <g key={`${edge.from}-${edge.to}`} className="animate-fadeIn">
         {/* Line */}
         <line
           x1={startX}
@@ -110,6 +117,10 @@ const VisualizationPanel: React.FC<VisualizationPanelProps> = ({ dsaType }) => {
           className="stroke-gray-400 dark:stroke-gray-500"
           strokeWidth="2"
           markerEnd="url(#arrowhead)"
+          style={{ ['--edge-length' as any]: `${distance}` }}
+          strokeDasharray={distance}
+          strokeDashoffset={distance}
+          className="stroke-gray-400 dark:stroke-gray-500 edge-draw"
         />
         
         {/* Edge Label */}
@@ -143,17 +154,39 @@ const VisualizationPanel: React.FC<VisualizationPanelProps> = ({ dsaType }) => {
     return messages[dsaType] || 'Data structure is empty.';
   };
 
+  const getViewBoxDimensions = () => {
+    if (visualState.nodes.length === 0) {
+      return { width: 800, height: 600 };
+    }
+
+    // Calculate bounds based on node positions
+    const padding = 80;
+    const nodeSize = 60;
+    
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    
+    visualState.nodes.forEach(node => {
+      minX = Math.min(minX, node.x - nodeSize);
+      minY = Math.min(minY, node.y - nodeSize);
+      maxX = Math.max(maxX, node.x + nodeSize);
+      maxY = Math.max(maxY, node.y + nodeSize);
+    });
+
+    const width = Math.max(800, maxX - minX + padding * 2);
+    const height = Math.max(400, maxY - minY + padding * 2);
+
+    return { width, height };
+  };
+
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900">
+    <div className="flex flex-col h-full">
       {/* Visualization Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700 px-4 py-3">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-          Visualization
-        </h2>
+      <div className="panel-header">
+        <h2 className="panel-title">Visualization</h2>
       </div>
 
       {/* SVG Canvas */}
-      <div className="flex-1 overflow-auto p-4">
+      <div className="flex-1 overflow-auto p-4 bg-white dark:bg-gray-900 bg-grid">
         {visualState.nodes.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center text-gray-400 dark:text-gray-600">
@@ -176,8 +209,10 @@ const VisualizationPanel: React.FC<VisualizationPanelProps> = ({ dsaType }) => {
         ) : (
           <svg
             ref={svgRef}
-            className="w-full h-full"
-            style={{ minHeight: '500px' }}
+            className="w-full h-auto"
+            viewBox={`0 0 ${getViewBoxDimensions().width} ${getViewBoxDimensions().height}`}
+            preserveAspectRatio="xMidYMid meet"
+            style={{ minHeight: '300px', maxHeight: '800px' }}
           >
             {/* Arrow marker definition */}
             <defs>

@@ -23,15 +23,15 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 animate-fadeIn">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-3xl max-h-[90vh] overflow-y-auto m-4 animate-slideDown">
-        <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 animate-fadeIn">
+      <div className="card rounded-xl shadow-xl max-w-3xl max-h-[90vh] overflow-y-auto m-4 animate-slideDown">
+        <div className="panel-header px-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Help & Documentation
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="icon-btn"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -170,7 +170,7 @@ traverse();`}
           </section>
         </div>
 
-        <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="panel-header px-6">
           <button
             onClick={onClose}
             className="w-full btn-primary"
