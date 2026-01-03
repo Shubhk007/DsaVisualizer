@@ -41,7 +41,7 @@ const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({ dsaType }) => {
     setCode(value || '');
   };
 
-  const handleEditorMount = (editor: any, monaco: any) => {
+  const handleEditorMount = (_editor: any, monaco: any) => {
     // Define elegant light theme
     monaco.editor.defineTheme('elegant-light', {
       base: 'vs',

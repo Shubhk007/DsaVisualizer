@@ -209,7 +209,6 @@ export const executeSandboxedCode = (
       if (capturedData.type === 'array' || capturedData.type === 'stack' || capturedData.type === 'queue') {
         const arr = capturedData.data;
         const isStack = capturedData.type === 'stack';
-        const isQueue = capturedData.type === 'queue';
         
         // Multi-row layout for arrays and queues to prevent overflow
         const nodeWidth = 70;

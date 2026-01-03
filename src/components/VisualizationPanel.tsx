@@ -114,7 +114,6 @@ const VisualizationPanel: React.FC<VisualizationPanelProps> = ({ dsaType }) => {
           y1={startY}
           x2={endX}
           y2={endY}
-          className="stroke-gray-400 dark:stroke-gray-500"
           strokeWidth="2"
           markerEnd="url(#arrowhead)"
           style={{ ['--edge-length' as any]: `${distance}` }}
