@@ -1,6 +1,6 @@
 # 🎯 DSA Visual Practice Platform
 <div align="center">
-live at : https://shubhk007.github.io/DsaVisualizer/
+live at : https://shubhk007.github.io/DsaVisualizer/ <br>
 **Interactive Data Structures & Algorithms Learning Platform**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
